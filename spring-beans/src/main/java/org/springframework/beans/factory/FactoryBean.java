@@ -58,7 +58,7 @@ import org.springframework.lang.Nullable;
  * the bootstrap process, even ahead of any post-processor setup. If you need access
  * other beans, implement {@link BeanFactoryAware} and obtain them programmatically.
  *
- * FactoryBean是基于约定的,他的实现类不应该鱼类注解驱动注入或者其他的反射设备
+ * FactoryBean是基于约定的,他的实现类不应该被注解注入或者反射创建
  * 他的初始化可能比bootstrap处理的还早,甚至在 post-processor 启动支持,如果你需要使用的其他的Bean,请实现BeanFactoryAware这个接口
  *
  * 小之注:看起来FactoryBean的初始化是在最前面呀
