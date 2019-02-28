@@ -61,6 +61,8 @@ import org.springframework.lang.Nullable;
  * BeanFactory lookup. Spring's Dependency Injection functionality is
  * implemented using this BeanFactory interface and its subinterfaces.
  *
+ * 通过setter方法或者构造器方法进行依赖注入要更好一点
+ *
  * <p>Normally a BeanFactory will load bean definitions stored in a configuration
  * source (such as an XML document), and use the {@code org.springframework.beans}
  * package to configure the beans. However, an implementation could simply return
@@ -69,14 +71,25 @@ import org.springframework.lang.Nullable;
  * properties file, etc. Implementations are encouraged to support references
  * amongst beans (Dependency Injection).
  *
+ * BeanFactory将会通过加载BeanDefinition去配置Bean对象
+ *
+ * BeanDefinition存在哪里没有约束,可以存在各种类型的配置文件中,例如:LADP,RDBMS,XML
+ *
  * <p>In contrast to the methods in {@link ListableBeanFactory}, all of the
  * operations in this interface will also check parent factories if this is a
  * {@link HierarchicalBeanFactory}. If a bean is not found in this factory instance,
  * the immediate parent factory will be asked. Beans in this factory instance
  * are supposed to override beans of the same name in any parent factory.
  *
+ * HierarchicalBeanFactory和ListableBeanFactory不同的地方在于:
+ * 如果如果一个Bean没有在该工厂实例中找到,他将会问一下他的父工厂
+ * 在这个工厂里的Bean实例应该会覆盖掉在父类工厂同名的Bean
+ *
  * <p>Bean factory implementations should support the standard bean lifecycle interfaces
  * as far as possible. The full set of initialization methods and their standard order is:
+ *
+ * Bean工厂的实现应该尽可能的支持下面的标准Bean生命周期接口
+ *
  * <ol>
  * <li>BeanNameAware's {@code setBeanName}
  * <li>BeanClassLoaderAware's {@code setBeanClassLoader}
@@ -100,6 +113,7 @@ import org.springframework.lang.Nullable;
  * </ol>
  *
  * <p>On shutdown of a bean factory, the following lifecycle methods apply:
+ * 当一个BeanFactory关闭的时候,下面的生命周期方法将会运行
  * <ol>
  * <li>{@code postProcessBeforeDestruction} methods of DestructionAwareBeanPostProcessors
  * <li>DisposableBean's {@code destroy}
@@ -132,6 +146,10 @@ public interface BeanFactory {
 	 * beans <i>created</i> by the FactoryBean. For example, if the bean named
 	 * {@code myJndiObject} is a FactoryBean, getting {@code &myJndiObject}
 	 * will return the factory, not the instance returned by the factory.
+	 *
+	 * 用来区分是FactoryBean实例还是FactoryBean创建的Bean
+	 * 如果&开始则获取FactoryBean,否则的将返回创建的实例
+	 *
 	 */
 	String FACTORY_BEAN_PREFIX = "&";
 
@@ -141,9 +159,18 @@ public interface BeanFactory {
 	 * <p>This method allows a Spring BeanFactory to be used as a replacement for the
 	 * Singleton or Prototype design pattern. Callers may retain references to
 	 * returned objects in the case of Singleton beans.
+	 *
+	 * 根据名称获取Bean的实例,可能是单例或者是原型
+	 * 在单例的Bean中会返回对象的引用
+	 *
 	 * <p>Translates aliases back to the corresponding canonical bean name.
+	 *
+	 * 翻译别名返回一致的Bean名称
+	 *
 	 * Will ask the parent factory if the bean cannot be found in this factory instance.
-	 * @param name the name of the bean to retrieve
+	 * 如果在这个Bean工厂里没有发现这个Bean将会去父中工厂要
+	 *
+	 * @param name the name of the bean to retrieve(检索)
 	 * @return an instance of the bean
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
 	 * @throws BeansException if the bean could not be obtained
@@ -163,6 +190,8 @@ public interface BeanFactory {
 	 * of the actual class, or {@code null} for any match. For example, if the value
 	 * is {@code Object.class}, this method will succeed whatever the class of the
 	 * returned instance.
+	 *
+	 * 根据名称和类型获取Bean,规则和前面一样
 	 * @return an instance of the bean
 	 * @throws NoSuchBeanDefinitionException if there is no such bean definition
 	 * @throws BeanNotOfRequiredTypeException if the bean is not of the required type
@@ -183,6 +212,8 @@ public interface BeanFactory {
 	 * the affected bean isn't a prototype
 	 * @throws BeansException if the bean could not be created
 	 * @since 2.5
+	 *
+	 * 获取Bean,允许重写BeanDefinition具体的默认构造参数
 	 */
 	Object getBean(String name, Object... args) throws BeansException;
 
@@ -199,6 +230,9 @@ public interface BeanFactory {
 	 * @throws BeansException if the bean could not be created
 	 * @since 3.0
 	 * @see ListableBeanFactory
+	 *
+	 * 在ListableBeanFactory中使用
+	 * 根据Class类型获取Bean
 	 */
 	<T> T getBean(Class<T> requiredType) throws BeansException;
 
@@ -219,6 +253,12 @@ public interface BeanFactory {
 	 * the affected bean isn't a prototype
 	 * @throws BeansException if the bean could not be created
 	 * @since 4.1
+	 *
+	 *
+	 * 在ListableBeanFactory通过 lookup 的方式使用
+	 * 仅在创建Bean的时候调用,传入具体的参数去创建
+	 *
+	 *
 	 */
 	<T> T getBean(Class<T> requiredType, Object... args) throws BeansException;
 
@@ -237,6 +277,8 @@ public interface BeanFactory {
 	 * will be able to obtain an instance for the same name.
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is present
+	 *
+	 * 如果是HierarchicalFactory将会问父类工厂是否有该实例
 	 */
 	boolean containsBean(String name);
 
