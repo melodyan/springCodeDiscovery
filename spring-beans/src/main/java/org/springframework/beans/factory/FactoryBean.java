@@ -24,18 +24,33 @@ import org.springframework.lang.Nullable;
  * interface, it is used as a factory for an object to expose, not directly as a
  * bean instance that will be exposed itself.
  *
+ * FactoryBean在BeanFactory里被一些工厂(有着自己的个人对象)所实现
+ * 如果一个Bean实现了这个接口,他被当作一个工厂使用去暴露对象,而不是直接的被当成一个Bean实例暴露它自己
+ *
  * <p><b>NB: A bean that implements this interface cannot be used as a normal bean.</b>
  * A FactoryBean is defined in a bean style, but the object exposed for bean
  * references ({@link #getObject()}) is always the object that it creates.
+ *
+ * 实现FactoryBean接口的Bean不能被当成一个正常的Bean
+ * FactoryBean定义了一个Bean的风格,他暴露出的对象依赖总是这个FactoryBean创建的
+ *
+ * 小之注:工厂嘛,很好理解,getObject拿的对象是这个工厂所返回的
  *
  * <p>FactoryBeans can support singletons and prototypes, and can either create
  * objects lazily on demand or eagerly on startup. The {@link SmartFactoryBean}
  * interface allows for exposing more fine-grained behavioral metadata.
  *
+ * FactoryBean可以支持单例或者多例,并且可以定义是否懒加载或者启动时直接加载
+ * SmartFactoryBean接口允许暴露出更多的详细的行为元数据
+ *
  * <p>This interface is heavily used within the framework itself, for example for
  * the AOP {@link org.springframework.aop.framework.ProxyFactoryBean} or the
  * {@link org.springframework.jndi.JndiObjectFactoryBean}. It can be used for
  * custom components as well; however, this is only common for infrastructure code.
+ *
+ * 这个接口经常被Spring自己的用写框架组件,例如AOP中ProxyFactoryBean(用来产生代理对象)
+ *
+ * 当然啦这个也可以用来写一般的组件啦,但是他只用来一些基础组件代码上
  *
  * <p><b>{@code FactoryBean} is a programmatic contract. Implementations are not
  * supposed to rely on annotation-driven injection or other reflective facilities.</b>
@@ -43,10 +58,17 @@ import org.springframework.lang.Nullable;
  * the bootstrap process, even ahead of any post-processor setup. If you need access
  * other beans, implement {@link BeanFactoryAware} and obtain them programmatically.
  *
+ * FactoryBean是基于约定的,他的实现类不应该鱼类注解驱动注入或者其他的反射设备
+ * 他的初始化可能比bootstrap处理的还早,甚至在 post-processor 启动支持,如果你需要使用的其他的Bean,请实现BeanFactoryAware这个接口
+ *
+ * 小之注:看起来FactoryBean的初始化是在最前面呀
+ *
  * <p>Finally, FactoryBean objects participate in the containing BeanFactory's
  * synchronization of bean creation. There is usually no need for internal
  * synchronization other than for purposes of lazy initialization within the
  * FactoryBean itself (or the like).
+ *
+ * BeanFactory同步创建Bean的时候需要FactoryBean对象参与,所以不推荐他懒加载
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
