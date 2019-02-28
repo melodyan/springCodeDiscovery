@@ -27,6 +27,10 @@ import org.springframework.lang.Nullable;
  * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}
  * are available for specific purposes.
  *
+ * BeanFactory是Spring访问Bean容器的根接口.
+ * BeanFactory是Bean容器最基本的客户端视图;
+ * BeanFactory的子接口像ListableBeanFactory和ConfigurableBeanFactory是为了其他特殊的目的//TODO
+ *
  * <p>This interface is implemented by objects that hold a number of bean definitions,
  * each uniquely identified by a String name. Depending on the bean definition,
  * the factory will return either an independent instance of a contained object
@@ -37,11 +41,19 @@ import org.springframework.lang.Nullable;
  * 2.0, further scopes are available depending on the concrete application
  * context (e.g. "request" and "session" scopes in a web environment).
  *
+ * BeanFactory由一些持有BeanDefinition的对象实现,他们每一个都以一个字符串名称作为唯一标志符
+ * 依赖BeanDefinition,这个工厂将返回单例对象或者多例对象
+ * 返回的对象类型取决于BeanFactoryConfiguration里面的配置:这里面依赖Environment里的Scope//TODO
+ *
  * <p>The point of this approach is that the BeanFactory is a central registry
  * of application components, and centralizes configuration of application
  * components (no more do individual objects need to read properties files,
  * for example). See chapters 4 and 11 of "Expert One-on-One J2EE Design and
  * Development" for a discussion of the benefits of this approach.
+ *
+ * 上述方法的关键点是使BeanFactory成为一个应用组件的注册中心,并且可以集中化配置应用组件
+ * (不再是处理个体对象时,需要再去读配置了)
+ * Expert One-on-One J2EE Design and Development 这本书4-11章节说了这种方法的好处
  *
  * <p>Note that it is generally better to rely on Dependency Injection
  * ("push" configuration) to configure application objects through setters
