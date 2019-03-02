@@ -30,6 +30,11 @@ import org.springframework.lang.Nullable;
  * preload all their bean definitions (such as XML-based factories) may implement
  * this interface.
  *
+ * ListableBeanFactory扩展了BeanFactory接口
+ * 所有实现它的Bean工厂可以枚举列举出他们所有的Bean实例，而不是根据客户端的请求一个一个去查找
+ *
+ * 实现预加载所有的BeanDefinition(例如基于XML的工厂)这个功能就是实现了ListableBeanFactory这个接口
+ *
  * <p>If this is a {@link HierarchicalBeanFactory}, the return values will <i>not</i>
  * take any BeanFactory hierarchy into account, but will relate only to the beans
  * defined in the current factory. Use the {@link BeanFactoryUtils} helper class
@@ -44,6 +49,7 @@ import org.springframework.lang.Nullable;
  * does allow transparent access to such special beans as well. However, in typical
  * scenarios, all beans will be defined by external bean definitions anyway, so most
  * applications don't need to worry about this differentiation.
+ *
  *
  * <p><b>NOTE:</b> With the exception of {@code getBeanDefinitionCount}
  * and {@code containsBeanDefinition}, the methods in this interface
