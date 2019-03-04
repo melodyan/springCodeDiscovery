@@ -102,6 +102,7 @@ public class FileSystemXmlApplicationContext extends AbstractXmlApplicationConte
 	 * @param configLocations array of file paths
 	 * @param parent the parent context
 	 * @throws BeansException if context creation failed
+	 *
 	 */
 	public FileSystemXmlApplicationContext(String[] configLocations, ApplicationContext parent) throws BeansException {
 		this(configLocations, true, parent);

@@ -197,6 +197,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
 			// recurse
+			//递归注册BeanDefinition
 			doRegisterBeanDefinitions(ele);
 		}
 	}
